@@ -1,0 +1,86 @@
+/* Temperature.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #181818;
+    color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .dashboard {
+    display: flex;
+    flex-direction: column;
+    background-color: #1c1c1c;
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+  }
+  
+  .temperature-section {
+    margin-bottom: 20px;
+  }
+  
+  .temperature-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .temperature-bar {
+    position: relative;
+    height: 20px;
+    background-color: #333;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  
+  .temp-fill {
+    height: 100%;
+    background: linear-gradient(to right, #76ff76, #ff8c00);
+    width: 50%; /* Temporary width */
+    transition: width 0.5s;
+  }
+  
+  .temperature-bar span {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    font-size: 0.9rem;
+  }
+  
+  #tempGraph {
+    background-color: #2a2a2a;
+    border-radius: 5px;
+  }
+  
+  .stats-section {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .stat {
+    background-color: #2a2a2a;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    width: 30%;
+  }
+  
+  .stat span {
+    display: block;
+  }
+  
+  .stat span:first-child {
+    font-size: 0.8rem;
+    color: #aaa;
+  }
+  
+  .stat span:last-child {
+    font-size: 1rem;
+    color: #ffa500;
+  }
+  
