@@ -1,0 +1,45 @@
+/* fuel_level.css */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+}
+
+.container {
+    margin: 50px auto;
+    width: 300px; /* Adjusted width for horizontal layout */
+}
+
+h2 {
+    color: #333;
+}
+
+.progress-bar {
+    display: flex;
+    flex-direction: row; /* Horizontal layout */
+    width: 100%;
+    height: 30px;
+    border: 2px solid #28a745;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #e0e0e0;
+    margin: 20px 0;
+}
+
+.segment {
+    flex: 1;
+    margin: 0 2px; /* Margin between segments for horizontal orientation */
+    background-color: #28a745;
+    transition: background-color 0.3s ease;
+}
+
+#fuel-level-text {
+    font-size: 18px;
+    color: #333;
+}
+
+#fuel-alarm {
+    margin-top: 20px;
+    transition: opacity 0.3s ease;
+}
