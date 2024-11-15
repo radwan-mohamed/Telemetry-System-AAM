@@ -1,19 +1,19 @@
 // dashboard_script.js
 
 // Get Canvas and Context
-const canvas = document.getElementById('speedometer');
+const canvas = document.getElementById('RPMometer');
 const ctx = canvas.getContext('2d');
 
 // Get Speed Text Element
-const speedText = document.getElementById('speed');
+const RPMText = document.getElementById('RPM');
 
 // Speed Variables
-let currentSpeed = 0; // Current speed
-const maxSpeed = 5000; // Maximum RPM
+let currentRPM = 0; // Current speed
+const maxRPM = 5000; // Maximum RPM
 const animationDuration = 1000; // Animation duration in milliseconds
 
-// Draw the Speedometer
-function drawSpeedometer(speed) {
+// Draw the RPMometer
+function drawRPMometer(RPM) {
     // Clear Canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -35,13 +35,13 @@ function drawSpeedometer(speed) {
     const segments = [
         { color: '#00ff00', from: 0, to: 2000 },     // Green
         { color: '#ffff00', from: 2000, to: 4000 },  // Yellow
-        { color: '#ff3b30', from: 4000, to: maxSpeed } // Red
+        { color: '#ff3b30', from: 4000, to: maxRPM } // Red
     ];
 
     // Draw segments
     segments.forEach(segment => {
-        const start = Math.PI + (segment.from / maxSpeed) * Math.PI;
-        const end = Math.PI + (segment.to / maxSpeed) * Math.PI;
+        const start = Math.PI + (segment.from / maxRPM) * Math.PI;
+        const end = Math.PI + (segment.to / maxRPM) * Math.PI;
 
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius - 10, start, end, false);
@@ -66,7 +66,7 @@ function drawSpeedometer(speed) {
     }
 
     // Draw Needle
-    const needleAngle = Math.PI + (speed / maxSpeed) * Math.PI;
+    const needleAngle = Math.PI + (RPM / maxRPM) * Math.PI;
     const needleLength = radius - 40;
     const needleEnd = polarToCartesian(centerX, centerY, needleLength, needleAngle);
 
@@ -90,10 +90,10 @@ function drawSpeedometer(speed) {
     ctx.textBaseline = 'middle';
 
     for (let i = 0; i <= numTicks; i++) {
-        const speedValue = (i / numTicks) * maxSpeed;
+        const RPMValue = (i / numTicks) * maxRPM;
         const angle = Math.PI + (i / numTicks) * Math.PI;
         const labelPos = polarToCartesian(centerX, centerY, radius - 50, angle);
-        ctx.fillText(speedValue.toString(), labelPos.x, labelPos.y );
+        ctx.fillText(RPMValue.toString(), labelPos.x, labelPos.y );
     }
 }
 
@@ -107,17 +107,17 @@ function polarToCartesian(centerX, centerY, radius, angle) {
 
 
 // Animate Speed Change
-function animateSpeed(targetSpeed) {
-    const startSpeed = currentSpeed;
-    const changeInSpeed = targetSpeed - startSpeed;
+function animateRPM(targetRPM) {
+    const startRPM = currentRPM;
+    const changeInRPM = targetRPM - startRPM;
     const startTime = performance.now();
 
     function animate(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / animationDuration, 1);
-        currentSpeed = startSpeed + changeInSpeed * easeOutCubic(progress);
-        drawSpeedometer(currentSpeed);
-        speedText.textContent = `${Math.round(currentSpeed)} RPM`;
+        currentRPM = startRPM + changeInRPM * easeOutCubic(progress);
+        drawRPMometer(currentRPM);
+        RPMText.textContent = `${Math.round(currentRPM)} RPM`;
 
         if (progress < 1) {
             requestAnimationFrame(animate);
@@ -133,6 +133,6 @@ function easeOutCubic(t) {
 }
 
 setInterval(() => {
-    const newSpeed = Math.floor(Math.random() * maxSpeed);
-    animateSpeed(newSpeed);
+    const newRPM = Math.floor(Math.random() * maxRPM);
+    animateRPM(newRPM);
 }, 3000);

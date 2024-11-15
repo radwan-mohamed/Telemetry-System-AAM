@@ -29,7 +29,7 @@ body {
 
 /* Speedometer Canvas Styling */
 /* Speedometer Canvas Styling */
-canvas#speedometer {
+canvas#RPMometer {
     position: absolute; /* Ensure the canvas is positioned absolutely */
     top: 10%; /* Adjusted to move the canvas up */
     width: 100%;
@@ -53,7 +53,7 @@ canvas#rpmArc {
 
 /* Speed Text Styling */
 
-#speed {
+#RPM {
     position: absolute;
     top: 110%; /* Adjusted to move text down */
     left: 55%;
@@ -85,3 +85,17 @@ canvas#rpmArc {
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
+
+/* RPM Container and Box */
+#rpmContainer {
+    width: 350px;
+    height: 250px; /* Adjusted height to match RPM layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #333333;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+

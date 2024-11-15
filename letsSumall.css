@@ -1,0 +1,172 @@
+/* Temperature.css */
+
+#temperature-dashboard {
+    display: flex;
+    flex-direction: column;
+    background-color: #1c1c1c;
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+    font-family: Arial, sans-serif;
+    color: #f0f0f0;
+}
+
+#temperature-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+#temperature-bar-container {
+    position: relative;
+    height: 20px;
+    background-color: #333;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+#temperature-fill {
+    height: 100%;
+    background: linear-gradient(to right, #76ff76, #ff8c00);
+    width: 50%; /* Temporary width */
+    transition: width 0.5s;
+}
+
+#temperature-value {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    font-size: 0.9rem;
+}
+
+#temperature-graph {
+    background-color: #2a2a2a;
+    border-radius: 5px;
+}
+
+#temperature-stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+#temperature-stat-max,
+#temperature-stat-avg,
+#temperature-stat-min {
+    background-color: #2a2a2a;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    width: 30%;
+}
+
+#temperature-stat-max span,
+#temperature-stat-avg span,
+#temperature-stat-min span {
+    display: block;
+}
+
+#temperature-stat-max span:first-child,
+#temperature-stat-avg span:first-child,
+#temperature-stat-min span:first-child {
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+#temperature-stat-max span:last-child,
+#temperature-stat-avg span:last-child,
+#temperature-stat-min span:last-child {
+    font-size: 1rem;
+    color: #ffa500;
+}
+
+/* this now for the rpm  */
+
+/* Global Reset */
+
+
+/* this the beging odf the rpm ^0^^0^^0^^0^^0^^0^^0^^0^^0^^0^ */
+
+
+
+/* Body Styling */
+
+
+/* Container Styling */
+
+
+/* Speedometer Canvas Styling */
+/* Speedometer Canvas Styling */
+canvas#RPMometer {
+    position: absolute; /* Ensure the canvas is positioned absolutely */
+    top: 10%; /* Adjusted to move the canvas up */
+    width: 100%;
+    height: auto;
+    background: #2c2c2c; /* Slightly lighter than body for distinction */
+    border-radius: 150px 150px 0 0; /* Rounded top edges */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: block;
+}
+
+
+/* RPM Arc Canvas Styling */
+canvas#rpmArc {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 80px; /* Height for the RPM arc */
+    background: none;
+    display: block;
+}
+
+/* Speed Text Styling */
+
+#RPM {
+    position: absolute;
+    top: 110%; /* Adjusted to move text down */
+    left: 55%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #ff3b30; /* Bright red for visibility */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8); /* Adds shadow for text emphasis */
+}
+
+/* Adjust the width of the box */
+.box {
+    padding: 20px;
+    background-color: #333333;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 300px; /* Adjust this width to make the box smaller */
+}
+
+/* Adjust the container width and height */
+.container {
+    position: relative;
+    width: 250px; /* Make container width match the box width */
+    height: 200px; /* Keep the height as needed for the RPMometer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Optional: Box Styling for Aesthetic */
+.container {
+    padding: 20px;
+    background-color: #333333;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+/* RPM Container and Box */
+
+
+/* end of the rpm U_UU_UU_UU_UU_UU_UU_UU_UU_U */
+
+

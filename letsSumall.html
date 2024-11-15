@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="letsSumall.css">
+</head>
+<body>
+  <div id="dashboard-container">
+    <!-- Temperature Section -->
+    <div id="temperature-dashboard">
+      <!-- Title Section -->
+      <h2 id="temperature-title">Temperature</h2>
+
+      <!-- Temperature Bar -->
+      <div id="temperature-bar-container">
+        <div id="temperature-fill"></div>
+        <span id="temperature-value">21.6°C</span>
+      </div>
+
+      <!-- Graph -->
+      <canvas id="temperature-graph" width="300" height="100"></canvas>
+
+      <!-- Stats -->
+      <div id="temperature-stats">
+        <div id="temperature-stat-max">
+          <span>Max:</span>
+          <span id="maxTemp">°C</span>
+        </div>
+        <div id="temperature-stat-avg">
+          <span>Avg:</span>
+          <span id="avgTemp">°C</span>
+        </div>
+        <div id="temperature-stat-min">
+          <span>Min:</span>
+          <span id="minTemp">°C</span>
+        </div>
+      </div>
+    </div>
+
+   <!-- now for the conatiner ^0^ of RPmmmmm-->
+   
+   <div class="box">
+    <div class="container">
+        <canvas id="RPMometer" width="400" height="200"></canvas>
+        <div id="RPM" class="speed-text">0 mph</div>
+    </div>
+</div>
+  
+<!-- wooooow landed safley -->
+
+  </div>
+
+  <script src="letsSumall.js"></script>
+  <!-- <script src="RPM_animate.js"></script> -->
+</body>
+</html>
