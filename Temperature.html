@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temperature Dashboard</title>
+  <link rel="stylesheet" href="Temperature.css">
+</head>
+<body>
+  <div class="dashboard">
+    <div class="temperature-section">
+      <h2>Temperature</h2>
+      <div class="temperature-bar">
+        <div class="temp-fill" id="tempFill"></div>
+        <span id="currentTemp">21.6°C</span>
+      </div>
+      <canvas id="tempGraph" width="300" height="100"></canvas>
+    </div>
+    <div class="stats-section">
+      <div class="stat">
+        <span>Max:</span>
+        <span id="maxTemp">°C</span>
+      </div>
+      <div class="stat">
+        <span>Avg:</span>
+        <span id="avgTemp">°C</span>
+      </div>
+      <div class="stat">
+        <span>Min:</span>
+        <span id="minTemp">°C</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="Temperature.js"></script>
+</body>
+</html>
