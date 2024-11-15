@@ -1,0 +1,51 @@
+/* Basic reset and styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #505153; /* Cool grey background */
+    color: #36343481;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+h1, h2 {
+    color: #cac2c2; /* Darker text for better contrast on grey background */
+    margin-bottom: 10px;
+}
+
+/* Speed chart container */
+#speedChartContainer, #rpmChartContainer {
+    margin-bottom: 20px;  /* Reduced margin between divs */
+    width: 600px;  /* Initial width */
+    height: 350px;  /* Fixed height for the div */
+    max-width: 1000px;  /* Maximum width */
+    text-align: center;
+      /* Prevents overflow if the canvas grows */
+    transition: width 0.5s ease-in-out;  /* Smooth transition for width change */
+}
+
+/* Styling for the chart canvas */
+canvas {
+    background-color: #2b2b2b;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 100%;  /* Ensure canvas fills the container's width */
+    height: 100%;  /* Ensure canvas height matches the container height */
+    max-height: 350px;  /* Max height to avoid overflow */
+}
+
+
+
+/* Adjustments for chart titles and labels */
+.chartjs-render-monitor {
+    color: #ffffff !important;
+}

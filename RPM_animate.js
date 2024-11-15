@@ -132,12 +132,6 @@ function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
 }
 
-// Initial Draw
-// drawSpeedometer(currentSpeed);
-// speedText.textContent = `${currentSpeed} RPM`;
-
-// Example: Simulate Speed Changes
-// You can replace this with real data inputs
 setInterval(() => {
     const newSpeed = Math.floor(Math.random() * maxSpeed);
     animateSpeed(newSpeed);
