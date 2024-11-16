@@ -1,3 +1,31 @@
+body {
+    font-family: Arial, sans-serif; /* Clean font style */
+    background-color: #333333; /* Light pastel yellow */
+ /* Light grey background for the body */
+    color: #333; /* Dark grey text color for readability */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6; /* Adjust line height for better text readability */
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+  .heading {
+    font-family: 'Poppins', sans-serif; /* Stylish font */
+    font-size: 3rem; /* Larger text size for emphasis */
+    font-weight: bold; /* Make it bold */
+    text-align: center; /* Center the text */
+    color: #4CAF50; /* Attractive color */
+    text-transform: uppercase; /* Makes it all uppercase */
+    letter-spacing: 2px; /* Spacing between letters */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full height of the viewport */
+}
+
+
+
+
 /* Temperature.css */
 
 #temperature-dashboard {
@@ -122,7 +150,7 @@ canvas#rpmArc {
 
 #RPM {
     position: absolute;
-    top: 110%; /* Adjusted to move text down */
+    top: 90%; /* Adjusted to move text down */
     left: 55%;
     transform: translate(-50%, -50%);
     font-size: 2.5em;
@@ -175,3 +203,13 @@ canvas#rpmArc {
     align-items: flex-start; /* Align elements at the top */
     gap: 10px; /* Space between dashboard and iframe */
   }
+
+  #fuel-level-container {
+    width: 100%; /* Adjust the width as needed */
+    height: 300px; /* Set the height of the iframe container */
+    margin: 20px auto; /* Centers the container horizontally and adds space on top */
+    border: none; /* Optional: removes the border of the container */
+    position: relative; /* Keeps the position relative for any adjustments */
+    border-radius: 20px;
+   }
+  
