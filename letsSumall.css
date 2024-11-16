@@ -141,7 +141,7 @@ canvas#rpmArc {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 300px; /* Adjust this width to make the box smaller */
+    width: 350px; /* Adjust this width to make the box smaller */
 }
 
 /* Adjust the container width and height */
@@ -169,4 +169,9 @@ canvas#rpmArc {
 
 /* end of the rpm U_UU_UU_UU_UU_UU_UU_UU_UU_U */
 
-
+#main-container {
+    display: flex;
+    justify-content: space-between; /* Space out the elements */
+    align-items: flex-start; /* Align elements at the top */
+    gap: 10px; /* Space between dashboard and iframe */
+  }
