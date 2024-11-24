@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    width: 80%;
+    max-width: 900px;
+}
+
+h1 {
+    color: #333;
+}
+
+#chart-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin: 20px 0;
+}
+
+#dataSlider {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    color: #555;
+    margin-top: 5px;
+}

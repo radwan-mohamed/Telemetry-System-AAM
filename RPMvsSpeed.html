@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed vs RPM Graph</title>
+    <link rel="stylesheet" href="RPMvsSpeed.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Speed vs RPM Graph</h1>
+        <div id="chart-container">
+            <canvas id="graph"></canvas>
+        </div>
+        <input type="range" id="dataSlider" min="0" value="0">
+        <div class="slider-labels">
+            <span id="startTime">0s</span>
+            <span id="endTime">Live</span>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="RPMvsSpeed.js"></script>
+</body>
+</html>
