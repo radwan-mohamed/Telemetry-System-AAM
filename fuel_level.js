@@ -61,6 +61,7 @@ updateFuelLevelDisplay(fuelLevel);
 
 // For simulation, change the fuel level after a few seconds
 // (This could be replaced with live data updates in a real scenario)
+
 setTimeout(() => { updateFuelLevelDisplay(75); }, 2000);
 setTimeout(() => { updateFuelLevelDisplay(50); }, 4000);
 setTimeout(() => { updateFuelLevelDisplay(25); }, 6000);

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="letsSumall.css">
+</head>
+<body>
+    <h1 class="heading">AAM Telemetry System</h1>
+  <div id="main-container">
+  <div id="dashboard-container">
+    <!-- Temperature Section -->
+    <div id="temperature-dashboard">
+      <!-- Title Section -->
+      <h2 id="temperature-title">Temperature</h2>
+
+      <!-- Temperature Bar -->
+      <div id="temperature-bar-container">
+        <div id="temperature-fill"></div>
+        <span id="temperature-value">21.6°C</span>
+      </div>
+
+      <!-- Graph -->
+      <canvas id="temperature-graph" width="300" height="100"></canvas>
+
+      <!-- Stats -->
+      <div id="temperature-stats">
+        <div id="temperature-stat-max">
+          <span>Max:</span>
+          <span id="maxTemp">°C</span>
+        </div>
+        <div id="temperature-stat-avg">
+          <span>Avg:</span>
+          <span id="avgTemp">°C</span>
+        </div>
+        <div id="temperature-stat-min">
+          <span>Min:</span>
+          <span id="minTemp">°C</span>
+        </div>
+      </div>  
+    </div>
+    <div style="padding-bottom: 10px;"></div> 
+<!-- just for the good look -->
+   <!-- now for the conatiner ^0^ of RPmmmmm-->
+   
+   <div class="box">
+    <div class="container">
+        <canvas id="RPMometer" width="400" height="200"></canvas>
+        <div id="RPM" class="speed-text">0 mph</div>
+      </div>
+    </div>
+    <!-- fuel div ^_____^ -->
+    <div id="fuel-level-container" style="overflow: hidden;">
+      <iframe src="fuel_level.html" frameborder="0" scrolling="no" style="width: 100%; height: 300px; border: none;"></iframe>
+    </div>
+    
+    
+   </div>
+   
+
+<!-- wooooow landed safley -->
+
+<!-- lets be on up right on a good way  -->
+
+<div style="width: 70%; height: 800px; border: none; padding-bottom: 100px; border-radius: 20px;">
+  <iframe src="Graphes/Graphes.html" width="100%" height="100%" frameborder="0"></iframe>
+</div>
+
+
+</div>
+
+<!-- end of the graphes -->
+
+
+<hr>
+<hr>
+
+
+<div style="width: 100%; height: 500px; overflow: hidden; border: none; border-radius: 20px;">
+  <iframe src="dashboardv2.html" 
+          style="width: 100%; height: 100%; border: none; overflow: hidden;" 
+          scrolling="no">
+  </iframe>
+</div>
+
+
+ 
+
+  <script src="letsSumall.js"></script>
+  <!-- <script src="RPM_animate.js"></script> -->
+</body>
+</html>
