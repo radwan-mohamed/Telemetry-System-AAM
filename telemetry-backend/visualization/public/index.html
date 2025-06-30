@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Telemetry Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Live Car Telemetry</h1>
+  <p id="rpm"></p>
+
+  <canvas id="speedChart" width="400" height="150"></canvas>
+  <canvas id="tempChart" width="400" height="150"></canvas>
+  <canvas id="fuelChart" width="400" height="150"></canvas>
+
+  <script>
+    const rpmElement = document.getElementById("rpm");
+
+    async function fetchDataAndUpdateCharts() {
+      const res = await fetch('/api/latest');
+      const data = await res.json();
+
+      speedChart.data.datasets[0].data.push(data.speed);
+      tempChart.data.datasets[0].data.push(data.temperature.celsius);
+      fuelChart.data.datasets[0].data.push(data.fuel_level);
+      rpmElement.innerText = `RPM: ${data.rpm}`;
+
+      speedChart.update();
+      tempChart.update();
+      fuelChart.update();
+    }
+
+    const speedChart = new Chart(document.getElementById("speedChart"), {
+      type: 'line',
+      data: { labels: [], datasets: [{ label: "Speed", data: [] }] }
+    });
+
+    const tempChart = new Chart(document.getElementById("tempChart"), {
+      type: 'line',
+      data: { labels: [], datasets: [{ label: "Temperature (C)", data: [] }] }
+    });
+
+    const fuelChart = new Chart(document.getElementById("fuelChart"), {
+      type: 'line',
+      data: { labels: [], datasets: [{ label: "Fuel Level", data: [] }] }
+    });
+
+    setInterval(fetchDataAndUpdateCharts, 500);
+  </script>
+</body>
+</html>
