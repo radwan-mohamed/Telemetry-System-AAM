@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: Formula Student Telemetry API
+  description: API documentation for telemetry data (speed, temperature, RPM, etc.)
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /api/data:
+    get:
+      summary: Get all telemetry data
+      description: Returns all the latest sensor readings
+      responses:
+        '200':
+          description: Successful response
+
+  /api/speed:
+    get:
+      summary: Get current speed
+      description: Returns the latest vehicle speed
+      responses:
+        '200':
+          description: Speed in km/h
+
+  /api/speed/history:
+    get:
+      summary: Get speed history
+      description: Returns a history of speed values over time
+      responses:
+        '200':
+          description: Array of speed readings
+
+  /api/temperature:
+    get:
+      summary: Get temperature reading
+      description: Returns the latest temperature sensor value
+      responses:
+        '200':
+          description: Temperature in Celsius
+
+  /api/rpm:
+    get:
+      summary: Get current RPM
+      description: Returns the current engine RPM
+      responses:
+        '200':
+          description: Revolutions per minute
+
+  /api/fuel:
+    get:
+      summary: Get latest fuel level
+      description: Returns the latest fuel level percentage from the database
+      responses:
+        '200':
+          description: Fuel level data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sensor_type:
+                    type: string
+                    example: "fuel"
+                  value:
+                    type: number
+                    format: float
+                    example: 63.1
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2025-07-01T14:00:00Z"
+        

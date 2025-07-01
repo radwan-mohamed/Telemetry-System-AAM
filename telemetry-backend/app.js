@@ -1,7 +1,13 @@
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./docs/openapi.yaml');
 const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const db = require('./database/connection');
+
 
 // Middleware
 app.use(cors());
@@ -23,4 +29,7 @@ app.use('/api/health', healthRoutes);
 
 app.listen(PORT, () => {
     console.log(`Telemetry API server running on port ${PORT}`);
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 });
