@@ -1,14 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const healthChecker = require('../logic/healthChecker');
+// routes/health.js
 
-router.get('/', async (req, res) => {
-    try {
-        const healthStatus = await healthChecker.performHealthCheck();
-        res.json(healthStatus);
-    } catch (error) {
-        res.status(500).json({ error: 'Health check failed' });
-    }
+const express = require('express');
+const router  = express.Router();
+
+// GET /api/health - simple server health check
+router.get('/', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date() });
 });
 
 module.exports = router;

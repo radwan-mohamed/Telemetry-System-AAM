@@ -50,25 +50,71 @@ paths:
 
   /api/fuel:
     get:
-      summary: Get latest fuel level
-      description: Returns the latest fuel level percentage from the database
+      summary: Get current fuel data
+      description: Returns level, volume, status, estimatedRange, timestamp.
       responses:
         '200':
-          description: Fuel level data retrieved successfully
+          description: Fuel data object
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  sensor_type:
-                    type: string
-                    example: "fuel"
-                  value:
+                  level:
                     type: number
                     format: float
-                    example: 63.1
+                    description: Fuel percentage (0–100)
+                  unit:
+                    type: string
+                    example: '%'
+                  volume:
+                    type: number
+                    format: float
+                    description: Volume in liters
+                  status:
+                    type: string
+                    example: 'LOW'
+                  estimatedRange:
+                    type: integer
+                    description: Estimated range in km
                   timestamp:
                     type: string
                     format: date-time
-                    example: "2025-07-01T14:00:00Z"
-        
+
+  /api/acceleration:
+    get:
+      summary: Get current acceleration
+      description: Calculates acceleration (m/s²) from last two RPM readings.
+      responses:
+        '200':
+          description: Acceleration data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  acceleration:
+                    type: number
+                    format: float
+                    description: m/s²
+                  unit:
+                    type: string
+                    example: 'm/s²'
+                  from:
+                    type: string
+                    format: date-time
+                    description: Timestamp of older reading
+                  to:
+                    type: string
+                    format: date-time
+                    description: Timestamp of most recent reading
+        '404':
+          description: Not enough data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Not enough RPM data to compute acceleration'
