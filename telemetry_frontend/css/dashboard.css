@@ -1,0 +1,23 @@
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 2rem;
+  justify-items: center;
+}
+
+.gauge-container {
+  background-color: #333;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gauge-label {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #ffffff;
+}

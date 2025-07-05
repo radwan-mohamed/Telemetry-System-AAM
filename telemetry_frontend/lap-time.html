@@ -1,0 +1,155 @@
+<!-- lap-time.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lap Time Analysis</title>
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    .lap-time-body {
+      background-color: #1b1b1b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .dark-header, .dark-footer {
+      background-color: #121212;
+    }
+    .accent-red {
+      color: #800a06;
+    }
+    .lap-time-main {
+      flex: 1;
+      padding: 2rem;
+      color: white;
+    }
+    .lap-title {
+      text-align: center;
+      color: #ffffff;
+    }
+    .track-visualization {
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .track-visualization img {
+      max-width: 800px;
+      width: 100%;
+      border: 2px solid #800a06;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .graph-section {
+      margin-bottom: 2rem;
+    }
+    .graph-container {
+      background-color: #2c2c2c;
+      border-radius: 12px;
+      padding: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      color: white;
+    }
+  </style>
+</head>
+<body class="lap-time-body">
+  <header class="navbar dark-header">
+    <div class="logo">AAM <span class="accent-red">Racing Team</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboardv2.html">Dashboard</a></li>
+      <li><a href="Graphes.html">Graphs</a></li>
+      <li><a href="lap-time.html">Lap Time</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </header>
+
+  <main class="lap-time-main">
+    <h1 class="lap-title">Lap Time Visualization</h1>
+
+    <div class="track-visualization">
+      <img src="images/track-visualization.png" alt="Track Visualization">
+    </div>
+
+    <section class="graph-section">
+      <h2 style="text-align: center">Speed vs Distance</h2>
+      <div class="graph-container">
+        <canvas id="lapSpeedChart"></canvas>
+      </div>
+    </section>
+
+    <section class="graph-section">
+      <h2 style="text-align: center">Throttle & Brake</h2>
+      <div class="graph-container">
+        <canvas id="lapControlChart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer dark-footer">
+    <p>&copy; 2025 AAM Racing Team. All Rights Reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const speedCtx = document.getElementById('lapSpeedChart').getContext('2d');
+    new Chart(speedCtx, {
+      type: 'line',
+      data: {
+        labels: Array.from({length: 20}, (_, i) => `${i * 100}m`),
+        datasets: [{
+          label: 'Speed (KPH)',
+          data: Array.from({length: 20}, () => 100 + Math.random() * 80),
+          borderColor: '#800a06',
+          backgroundColor: 'rgba(128, 10, 6, 0.2)',
+          tension: 0.4
+        }]
+      },
+      options: {
+        scales: {
+          x: { ticks: { color: 'white' }, title: { text: 'Distance', display: true, color: 'white' } },
+          y: { ticks: { color: 'white' }, title: { text: 'Speed (KPH)', display: true, color: 'white' } }
+        },
+        plugins: { legend: { labels: { color: 'white' } } }
+      }
+    });
+
+    const controlCtx = document.getElementById('lapControlChart').getContext('2d');
+    new Chart(controlCtx, {
+      type: 'line',
+      data: {
+        labels: Array.from({length: 20}, (_, i) => `${i * 100}m`),
+        datasets: [
+          {
+            label: 'Throttle %',
+            data: Array.from({length: 20}, () => Math.random() * 100),
+            borderColor: '#00ff88',
+            backgroundColor: 'rgba(0,255,136,0.1)',
+            tension: 0.4
+          },
+          {
+            label: 'Brake %',
+            data: Array.from({length: 20}, () => Math.random() * 100),
+            borderColor: '#ffcc00',
+            backgroundColor: 'rgba(255,204,0,0.1)',
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        scales: {
+          x: { ticks: { color: 'white' }, title: { text: 'Distance', display: true, color: 'white' } },
+          y: { ticks: { color: 'white' }, title: { text: '%', display: true, color: 'white' } }
+        },
+        plugins: { legend: { labels: { color: 'white' } } }
+      }
+    });
+  </script>
+</body>
+</html>

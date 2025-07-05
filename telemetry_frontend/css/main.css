@@ -1,0 +1,146 @@
+/* main.css (Enhanced Theme) */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  background-color: #1b1b1b;
+  color: #ffffff;
+}
+
+.navbar {
+  background-color: #121212;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.navbar .logo span {
+  color: #800a06;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: #ff3b30;
+  border-bottom: 2px solid #ff3b30;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: #800a06;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button.secondary {
+  background-color: #3f3f3f;
+}
+
+.cta-button:hover {
+  background-color: #d93228;
+}
+
+.snippet-section {
+  padding: 3rem 2rem;
+  text-align: center;
+  background-color: #252120;
+}
+
+.snippet-section h2 {
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.snippet-gauge,
+.graph-preview {
+  margin: 1rem auto;
+  width: fit-content;
+}
+
+.graph-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+footer {
+  background-color: #121212;
+  color: #ffffff;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  margin-top: 4rem;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .graph-preview {
+    flex-direction: column;
+  }
+}
+
+/* dashboard.css additions */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 2rem;
+  justify-items: center;
+}
+
+.gauge-container {
+  background-color: #2c2c2c;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 240px;
+}
+
+.gauge-label {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+canvas {
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  padding: 0.5rem;
+}

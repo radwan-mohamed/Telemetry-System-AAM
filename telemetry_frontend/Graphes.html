@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graphs</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/graphs.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver"></script>
+  <style>
+    body {
+      background-color: #1b1b1b;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header, footer {
+      background-color: #121212;
+    }
+    .accent-red {
+      color: #800a06;
+    }
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+    }
+    .graph-section {
+      margin-bottom: 3rem;
+    }
+    .graph-container {
+      background-color: #2c2c2c;
+      border-radius: 12px;
+      padding: 1rem;
+      width: 1000px;
+      max-width: 95vw;
+      margin: 0 auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    .graph-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .graph-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0;
+      font-size: 1.5rem;
+      text-align: center;
+      width: 100%;
+      pointer-events: none;
+    }
+    .export-buttons {
+      z-index: 1;
+    }
+    .export-buttons button {
+      background-color: #800a06;
+      color: white;
+      border: none;
+      padding: 0.4rem 1rem;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    canvas {
+      width: 100% !important;
+      height: 400px !important;
+      background-color: #1e1e1e;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">AAM <span class="accent-red">Racing Team</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboardv2.html">Dashboard</a></li>
+      <li><a href="Graphes.html" class="active">Graphs</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </header>
+
+  <main class="main-content">
+    <h1 style="text-align: center;">Telemetry Graphs</h1>
+    <div id="charts"></div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 AAM Racing Team. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    const chartConfigs = [
+      { id: 'speedTimeChart', title: 'Speed vs Time', label: 'Speed', x: 'Time (s)', y: 'Speed (KPH)', color: 'royalblue' },
+      { id: 'rpmTimeChart', title: 'RPM vs Time', label: 'RPM', x: 'Time (s)', y: 'RPM', color: 'red' },
+      { id: 'throttleBrakeChart', title: 'Throttle vs Brake vs Time', dual: true, x: 'Time (s)', y: '%', datasets: [
+        { label: 'Throttle %', color: '#00ff88' },
+        { label: 'Brake %', color: '#ffcc00' }
+      ] },
+      { id: 'rpmSpeedChart', title: 'RPM vs Speed', label: 'RPM', x: 'Speed (KPH)', y: 'RPM', color: '#00ffff' },
+      { id: 'tempTimeChart', title: 'Temperature vs Time', label: 'Temp', x: 'Time (s)', y: 'Temperature (°C)', color: '#ff4081' },
+      { id: 'tempSpeedChart', title: 'Temperature vs Speed', label: 'Temp', x: 'Speed (KPH)', y: 'Temperature (°C)', color: '#e040fb' },
+      { id: 'tempRpmChart', title: 'Temperature vs RPM', label: 'Temp', x: 'RPM', y: 'Temperature (°C)', color: '#7c4dff' }
+    ];
+
+    const chartInstances = {};
+    const chartData = {
+      time: [], speed: [], rpm: [], throttle: [], brake: [], temp: []
+    };
+    const MAX_POINTS = 100;
+
+    function createCanvasSection(config) {
+      const container = document.createElement('section');
+      container.className = 'graph-section';
+      container.innerHTML = `
+        <div class="graph-container">
+          <div class="graph-header">
+            <h2 class="graph-title">${config.title}</h2>
+            <div class="export-buttons">
+              <button onclick="exportChartAsImage(chartInstances['${config.id}'], '${config.title.replace(/ /g, '_')}')">Export Image</button>
+              <button onclick="exportChartAsCSV(chartInstances['${config.id}'], '${config.title.replace(/ /g, '_')}')">Export CSV</button>
+            </div>
+          </div>
+          <canvas id="${config.id}"></canvas>
+        </div>
+      `;
+      document.getElementById('charts').appendChild(container);
+    }
+
+    function createChart(config) {
+      const ctx = document.getElementById(config.id).getContext('2d');
+      const datasets = config.dual ? config.datasets.map(ds => ({
+        label: ds.label,
+        data: [],
+        borderColor: ds.color,
+        backgroundColor: ds.color + '33',
+        tension: 0.4,
+        pointRadius: 2
+      })) : [{
+        label: config.label,
+        data: [],
+        borderColor: config.color,
+        backgroundColor: config.color + '33',
+        tension: 0.4,
+        pointRadius: 2
+      }];
+
+      chartInstances[config.id] = new Chart(ctx, {
+        type: 'line',
+        data: { labels: [], datasets },
+        options: {
+          responsive: true,
+          scales: {
+            x: { title: { display: true, text: config.x, color: 'white' }, ticks: { color: 'white' } },
+            y: { title: { display: true, text: config.y, color: 'white' }, ticks: { color: 'white' } }
+          },
+          plugins: {
+            legend: { labels: { color: 'white' } },
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ${ctx.formattedValue}`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateCharts() {
+      const { time, speed, rpm, throttle, brake, temp } = chartData;
+      chartInstances['speedTimeChart'].data.labels = [...time];
+      chartInstances['speedTimeChart'].data.datasets[0].data = [...speed];
+
+      chartInstances['rpmTimeChart'].data.labels = [...time];
+      chartInstances['rpmTimeChart'].data.datasets[0].data = [...rpm];
+
+      chartInstances['throttleBrakeChart'].data.labels = [...time];
+      chartInstances['throttleBrakeChart'].data.datasets[0].data = [...throttle];
+      chartInstances['throttleBrakeChart'].data.datasets[1].data = [...brake];
+
+      chartInstances['rpmSpeedChart'].data.labels = [...speed];
+      chartInstances['rpmSpeedChart'].data.datasets[0].data = [...rpm];
+
+      chartInstances['tempTimeChart'].data.labels = [...time];
+      chartInstances['tempTimeChart'].data.datasets[0].data = [...temp];
+
+      chartInstances['tempSpeedChart'].data.labels = [...speed];
+      chartInstances['tempSpeedChart'].data.datasets[0].data = [...temp];
+
+      chartInstances['tempRpmChart'].data.labels = [...rpm];
+      chartInstances['tempRpmChart'].data.datasets[0].data = [...temp];
+
+      Object.values(chartInstances).forEach(chart => chart.update());
+    }
+
+    function simulateData() {
+      const t = chartData.time.length ? chartData.time[chartData.time.length - 1] + 1 : 0;
+      chartData.time.push(t);
+      chartData.speed.push(Math.floor(Math.random() * 150));
+      chartData.rpm.push(Math.floor(Math.random() * 8000));
+      chartData.throttle.push(Math.floor(Math.random() * 100));
+      chartData.brake.push(Math.floor(Math.random() * 100));
+      chartData.temp.push(Math.floor(Math.random() * 120));
+
+      Object.keys(chartData).forEach(key => {
+        if (chartData[key].length > MAX_POINTS) chartData[key].shift();
+      });
+
+      updateCharts();
+    }
+
+    function exportChartAsImage(chart, filename) {
+      const url = chart.toBase64Image();
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename + '.png';
+      a.click();
+    }
+
+    function exportChartAsCSV(chart, filename) {
+      const labels = chart.data.labels;
+      const csvLines = [ ['Label', ...labels] ];
+      chart.data.datasets.forEach(ds => {
+        csvLines.push([ds.label, ...ds.data]);
+      });
+      const csv = csvLines.map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      saveAs(blob, filename + '.csv');
+    }
+
+    window.onload = () => {
+      chartConfigs.forEach(cfg => {
+        createCanvasSection(cfg);
+        createChart(cfg);
+      });
+      setInterval(simulateData, 1000);
+    };
+  </script>
+</body>
+</html>

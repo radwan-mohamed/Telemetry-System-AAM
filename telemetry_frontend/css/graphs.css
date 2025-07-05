@@ -1,0 +1,21 @@
+#speedChartContainer,
+#rpmChartContainer {
+  margin: 2rem auto;
+  width: 80%;
+  max-width: 900px;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+canvas {
+  width: 100% !important;
+  height: 400px !important;
+}
+
+h2 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-align: center;
+}

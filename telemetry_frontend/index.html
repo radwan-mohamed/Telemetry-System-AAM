@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - AAM Racing Team</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-gauges/gauge.min.js"></script>
+  <style>
+    body {
+      background-color: #1b1b1b;
+      color: white;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header, footer {
+      background-color: #121212;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .carousel-container {
+      position: relative;
+      max-width: 1000px;
+      margin: auto;
+      overflow: hidden;
+    }
+
+    .carousel-inner {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel-item {
+      min-width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #800a06;
+      color: white;
+      border: none;
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      z-index: 10;
+      border-radius: 50%;
+    }
+
+    .carousel-nav.left { left: 10px; }
+    .carousel-nav.right { right: 10px; }
+
+    .see-more {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .see-more a {
+      background-color: #800a06;
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+    }
+
+    canvas {
+      background-color: #1e1e1e;
+      border-radius: 12px;
+    }
+
+    .gauge-box {
+      background-color: #2c2c2c;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 320px;
+    }
+
+    .gauge-label {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">AAM <span class="accent-red">Racing Team</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="dashboardv2.html">Dashboard</a></li>
+      <li><a href="Graphes.html">Graphs</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </header>
+
+  <main>
+    <!-- Graph Carousel -->
+    <h2 class="section-title">Telemetry Graph Snapshots</h2>
+    <div class="carousel-container">
+      <button class="carousel-nav left" onclick="prevSlide('graph')">‹</button>
+      <div class="carousel-inner" id="graphCarousel">
+        <div class="carousel-item">
+          <canvas id="graph1" width="900" height="350"></canvas>
+        </div>
+        <div class="carousel-item">
+          <canvas id="graph2" width="900" height="350"></canvas>
+        </div>
+        <div class="carousel-item">
+          <canvas id="graph3" width="900" height="350"></canvas>
+        </div>
+      </div>
+      <button class="carousel-nav right" onclick="nextSlide('graph')">›</button>
+    </div>
+    <div class="see-more"><a href="Graphes.html">See More Graphs</a></div>
+
+    <!-- Gauges Carousel -->
+    <h2 class="section-title">Live Dashboard Gauges</h2>
+    <div class="carousel-container">
+      <button class="carousel-nav left" onclick="prevSlide('gauge')">‹</button>
+      <div class="carousel-inner" id="gaugeCarousel">
+        <div class="carousel-item">
+          <div class="gauge-box">
+            <canvas id="gauge1" width="300" height="300"></canvas>
+            <p class="gauge-label">Speed</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="gauge-box">
+            <canvas id="gauge2" width="300" height="300"></canvas>
+            <p class="gauge-label">RPM</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="gauge-box">
+            <canvas id="gauge3" width="300" height="300"></canvas>
+            <p class="gauge-label">Engine Temp</p>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-nav right" onclick="nextSlide('gauge')">›</button>
+    </div>
+    <div class="see-more"><a href="dashboardv2.html">See Full Dashboard</a></div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 AAM Racing Team. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    let graphIndex = 0, gaugeIndex = 0;
+
+    function nextSlide(type) {
+      const el = document.getElementById(type + 'Carousel');
+      const count = el.children.length;
+      if (type === 'graph') {
+        graphIndex = (graphIndex + 1) % count;
+        el.style.transform = `translateX(-${graphIndex * 100}%)`;
+      } else {
+        gaugeIndex = (gaugeIndex + 1) % count;
+        el.style.transform = `translateX(-${gaugeIndex * 100}%)`;
+      }
+    }
+
+    function prevSlide(type) {
+      const el = document.getElementById(type + 'Carousel');
+      const count = el.children.length;
+      if (type === 'graph') {
+        graphIndex = (graphIndex - 1 + count) % count;
+        el.style.transform = `translateX(-${graphIndex * 100}%)`;
+      } else {
+        gaugeIndex = (gaugeIndex - 1 + count) % count;
+        el.style.transform = `translateX(-${gaugeIndex * 100}%)`;
+      }
+    }
+
+    // Graphs preview
+    const ctx1 = document.getElementById('graph1').getContext('2d');
+    const ctx2 = document.getElementById('graph2').getContext('2d');
+    const ctx3 = document.getElementById('graph3').getContext('2d');
+
+    new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels: [...Array(20).keys()],
+        datasets: [{
+          label: 'Speed',
+          data: Array.from({ length: 20 }, () => Math.random() * 100),
+          borderColor: 'royalblue',
+          backgroundColor: 'rgba(65,105,225,0.3)',
+          tension: 0.3
+        }]
+      }
+    });
+
+    new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: [...Array(20).keys()],
+        datasets: [{
+          label: 'RPM',
+          data: Array.from({ length: 20 }, () => Math.random() * 7000),
+          borderColor: 'red',
+          backgroundColor: 'rgba(255,0,0,0.3)',
+          tension: 0.3
+        }]
+      }
+    });
+
+    new Chart(ctx3, {
+      type: 'line',
+      data: {
+        labels: [...Array(20).keys()],
+        datasets: [
+          {
+            label: 'Throttle %',
+            data: Array.from({ length: 20 }, () => Math.random() * 100),
+            borderColor: '#00ff88',
+            tension: 0.3
+          },
+          {
+            label: 'Brake %',
+            data: Array.from({ length: 20 }, () => Math.random() * 100),
+            borderColor: '#ffcc00',
+            tension: 0.3
+          }
+        ]
+      }
+    });
+
+    // Styled gauge creation
+    function createStyledGauge(id, options) {
+      return new RadialGauge({
+        renderTo: id,
+        width: 300,
+        height: 300,
+        units: options.units,
+        minValue: options.min,
+        maxValue: options.max,
+        value: 0,
+        majorTicks: options.ticks,
+        minorTicks: 2,
+        strokeTicks: true,
+        highlights: [
+          { from: options.min, to: options.green, color: "rgba(0,255,0,.15)" },
+          { from: options.green, to: options.yellow, color: "rgba(255,255,0,.15)" },
+          { from: options.yellow, to: options.max, color: "rgba(255,30,0,.25)" }
+        ],
+        colorPlate: "#222",
+        colorMajorTicks: "#f5f5f5",
+        colorMinorTicks: "#ddd",
+        colorTitle: "#fff",
+        colorUnits: "#ccc",
+        colorNumbers: "#eee",
+        colorNeedle: "red",
+        colorNeedleEnd: "red",
+        valueBox: true,
+        animationRule: "linear",
+        animationDuration: 500,
+        needleType: "arrow",
+        needleWidth: 2,
+        borders: false,
+        borderShadowWidth: 0,
+        ticksAngle: 180,
+        startAngle: 90,
+      }).draw();
+    }
+
+    // Create 3 preview gauges
+    const gauge1 = createStyledGauge("gauge1", {
+      units: "Speed",
+      min: 0,
+      max: 300,
+      green: 100,
+      yellow: 180,
+      ticks: ["0", "40", "80", "120", "160", "200", "240", "280", "300"]
+    });
+
+    const gauge2 = createStyledGauge("gauge2", {
+      units: "RPM",
+      min: 0,
+      max: 7000,
+      green: 3000,
+      yellow: 5000,
+      ticks: ["0", "1000", "2000", "3000", "4000", "5000", "6000", "7000"]
+    });
+
+    const gauge3 = createStyledGauge("gauge3", {
+      units: "°C",
+      min: 0,
+      max: 120,
+      green: 60,
+      yellow: 90,
+      ticks: ["0", "20", "40", "60", "80", "100", "120"]
+    });
+
+    // Update values every 1.5s
+    setInterval(() => {
+      gauge1.value = Math.random() * 300;
+      gauge2.value = Math.random() * 7000;
+      gauge3.value = Math.random() * 120;
+    }, 1500);
+  </script>
+</body>
+</html>

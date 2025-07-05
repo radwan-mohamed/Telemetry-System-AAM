@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telemetry Dashboard</title>
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      background-color: #1e1e1e;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #ffffff;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 2rem;
+      justify-items: center;
+    }
+
+    .gauge-container {
+      width: 320px;
+      height: 220px;
+      background-color: #333333;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .gauge-label {
+      font-size: 1.2em;
+      text-align: center;
+    }
+
+    .gear-box {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      background-color: #444;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 0 10px #000;
+    }
+
+    .gear-indicator {
+      font-size: 48px;
+      font-weight: bold;
+      color: #ffcc00;
+    }
+
+    .iat-centered {
+      grid-column: 1 / -1;
+    }
+
+    footer.footer {
+      background-color: #121212;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">AAM <span class="accent-red">Racing Team</span></div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboardv2.html" class="active">Dashboard</a></li>
+      <li><a href="Graphes.html">Graphs</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </header>
+
+  <main>
+    <div class="dashboard">
+      <div class="gauge-container">
+        <canvas id="speed" width="300" height="150"></canvas>
+        <div class="gauge-label">Speed</div>
+      </div>
+      <div class="gauge-container">
+        <canvas id="rpm" width="300" height="150"></canvas>
+        <div class="gauge-label">RPM</div>
+      </div>
+      <div class="gauge-container">
+        <canvas id="temperature" width="300" height="150"></canvas>
+        <div class="gauge-label">Engine Temperature</div>
+      </div>
+      <div class="gauge-container">
+        <canvas id="fuel" width="300" height="150"></canvas>
+        <div class="gauge-label">Fuel Level</div>
+      </div>
+      <div class="gauge-container">
+        <canvas id="throttle" width="300" height="150"></canvas>
+        <div class="gauge-label">Throttle</div>
+      </div>
+      <div class="gauge-container">
+        <canvas id="brake" width="300" height="150"></canvas>
+        <div class="gauge-label">Brake</div>
+      </div>
+      <div class="gauge-container">
+        <canvas id="oilPressure" width="300" height="150"></canvas>
+        <div class="gauge-label">Oil Pressure</div>
+      </div>
+      <div class="gauge-container">
+        <canvas id="coolantTemp" width="300" height="150"></canvas>
+        <div class="gauge-label">Coolant Temp</div>
+      </div>
+      <div class="gauge-container iat-centered">
+        <canvas id="iat" width="300" height="150"></canvas>
+        <div class="gauge-label">IAT</div>
+      </div>
+    </div>
+
+    <div class="gear-box">
+      <div class="gear-indicator" id="gearDisplay">N</div>
+      <div class="gauge-label">Gear</div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 AAM Racing Team. All Rights Reserved.</p>
+  </footer>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
