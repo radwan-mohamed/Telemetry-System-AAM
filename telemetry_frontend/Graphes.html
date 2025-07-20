@@ -199,7 +199,7 @@
 
       Object.values(chartInstances).forEach(chart => chart.update());
     }
-
+/*
     function simulateData() {
       const t = chartData.time.length ? chartData.time[chartData.time.length - 1] + 1 : 0;
       chartData.time.push(t);
@@ -214,7 +214,7 @@
       });
 
       updateCharts();
-    }
+    }*/
 
     function exportChartAsImage(chart, filename) {
       const url = chart.toBase64Image();

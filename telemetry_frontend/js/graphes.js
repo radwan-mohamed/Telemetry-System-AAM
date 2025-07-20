@@ -42,10 +42,6 @@ function initializeCharts() {
     data: [],
     borderColor: 'royalblue',
     backgroundColor: 'rgba(65, 105, 225, 0.1)',
-    pointBackgroundColor: ctx => {
-      const v = ctx.dataset.data[ctx.dataIndex];
-      return v > 100 ? 'red' : v > 50 ? 'yellow' : 'blue';
-    },
     pointRadius: 4,
     tension: 0.4
   }]);
@@ -55,13 +51,7 @@ function initializeCharts() {
     data: [],
     borderColor: 'red',
     backgroundColor: 'rgba(255, 0, 0, 0.1)',
-    pointBackgroundColor: ctx => {
-      const v = ctx.dataset.data[ctx.dataIndex];
-      return v < 2000 ? 'white' : v < 4000 ? 'blue' : 'red';
-    },
     pointRadius: 4,
-    pointBorderColor: 'black',
-    pointBorderWidth: 2,
     tension: 0.4
   }]);
 
@@ -120,57 +110,60 @@ function initializeCharts() {
     tension: 0.4
   }]);
 
-  setInterval(updateData, 1000);
+  // Start updating from backend
+  setInterval(updateDataFromBackend, 1000);
 }
 
-function updateData() {
-  const t = time.length ? time[time.length - 1] + 1 : 0;
-  const s = Math.floor(Math.random() * 150);
-  const r = Math.floor(Math.random() * 8000);
-  const th = Math.floor(Math.random() * 100);
-  const br = Math.floor(Math.random() * 100);
-  const temp = Math.floor(Math.random() * 120);
+async function updateDataFromBackend() {
+  try {
+    const res = await fetch('/api/data');
+    const data = await res.json();
 
-  time.push(t);
-  speed.push(s);
-  rpm.push(r);
-  throttle.push(th);
-  brake.push(br);
-  temperature.push(temp);
+    const t = time.length ? time[time.length - 1] + 1 : 0;
 
-  if (time.length > MAX_DATA_POINTS) {
-    time.shift(); speed.shift(); rpm.shift(); throttle.shift(); brake.shift(); temperature.shift();
+    time.push(t);
+    speed.push(data.speed || 0);
+    rpm.push(data.rpm || 0);
+    throttle.push(data.throttle || 0);
+    brake.push(data.brake || 0);
+    temperature.push(data.temperature || 0);
+
+    if (time.length > MAX_DATA_POINTS) {
+      time.shift(); speed.shift(); rpm.shift(); throttle.shift(); brake.shift(); temperature.shift();
+    }
+
+    speedTimeChart.data.labels = [...time];
+    speedTimeChart.data.datasets[0].data = [...speed];
+    speedTimeChart.update();
+
+    rpmTimeChart.data.labels = [...time];
+    rpmTimeChart.data.datasets[0].data = [...rpm];
+    rpmTimeChart.update();
+
+    throttleBrakeChart.data.labels = [...time];
+    throttleBrakeChart.data.datasets[0].data = [...throttle];
+    throttleBrakeChart.data.datasets[1].data = [...brake];
+    throttleBrakeChart.update();
+
+    rpmSpeedChart.data.labels = [...speed];
+    rpmSpeedChart.data.datasets[0].data = [...rpm];
+    rpmSpeedChart.update();
+
+    tempTimeChart.data.labels = [...time];
+    tempTimeChart.data.datasets[0].data = [...temperature];
+    tempTimeChart.update();
+
+    tempSpeedChart.data.labels = [...speed];
+    tempSpeedChart.data.datasets[0].data = [...temperature];
+    tempSpeedChart.update();
+
+    tempRpmChart.data.labels = [...rpm];
+    tempRpmChart.data.datasets[0].data = [...temperature];
+    tempRpmChart.update();
+
+  } catch (error) {
+    console.error('Error fetching telemetry for graphs:', error);
   }
-
-  // Update chart datasets
-  speedTimeChart.data.labels = [...time];
-  speedTimeChart.data.datasets[0].data = [...speed];
-  speedTimeChart.update();
-
-  rpmTimeChart.data.labels = [...time];
-  rpmTimeChart.data.datasets[0].data = [...rpm];
-  rpmTimeChart.update();
-
-  throttleBrakeChart.data.labels = [...time];
-  throttleBrakeChart.data.datasets[0].data = [...throttle];
-  throttleBrakeChart.data.datasets[1].data = [...brake];
-  throttleBrakeChart.update();
-
-  rpmSpeedChart.data.labels = [...speed];
-  rpmSpeedChart.data.datasets[0].data = [...rpm];
-  rpmSpeedChart.update();
-
-  tempTimeChart.data.labels = [...time];
-  tempTimeChart.data.datasets[0].data = [...temperature];
-  tempTimeChart.update();
-
-  tempSpeedChart.data.labels = [...speed];
-  tempSpeedChart.data.datasets[0].data = [...temperature];
-  tempSpeedChart.update();
-
-  tempRpmChart.data.labels = [...rpm];
-  tempRpmChart.data.datasets[0].data = [...temperature];
-  tempRpmChart.update();
 }
 
 window.onload = initializeCharts;

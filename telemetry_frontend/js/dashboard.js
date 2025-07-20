@@ -12,7 +12,6 @@ const maxValues = {
   iat: 100
 };
 
-const fuelConsumptionRate = 0.1;
 const lowFuelThreshold = 5;
 const gears = ['N', '1', '2', '3', '4', '5', '6'];
 
@@ -21,11 +20,6 @@ function polarToCartesian(cx, cy, radius, angle) {
     x: cx + radius * Math.cos(angle),
     y: cy + radius * Math.sin(angle)
   };
-}
-
-function animateValue(current, target, step = 0.1) {
-  if (Math.abs(current - target) < step) return target;
-  return current + (current < target ? step : -step);
 }
 
 function drawGauge(canvasId, value, maxValue, unit, numTicks = 20) {
@@ -98,18 +92,28 @@ const gaugeValues = {
   iat: 0
 };
 
-function updateDashboard() {
-  gaugeValues.speed = animateValue(gaugeValues.speed, Math.random() * maxValues.speed);
-  gaugeValues.rpm = animateValue(gaugeValues.rpm, Math.random() * maxValues.rpm);
-  gaugeValues.temperature = animateValue(gaugeValues.temperature, Math.random() * maxValues.temperature);
-  gaugeValues.throttle = animateValue(gaugeValues.throttle, Math.random() * maxValues.throttle);
-  gaugeValues.brake = animateValue(gaugeValues.brake, Math.random() * maxValues.brake);
-  gaugeValues.oilPressure = animateValue(gaugeValues.oilPressure, Math.random() * maxValues.oilPressure);
-  gaugeValues.coolantTemp = animateValue(gaugeValues.coolantTemp, Math.random() * maxValues.coolantTemp);
-  gaugeValues.iat = animateValue(gaugeValues.iat, Math.random() * maxValues.iat);
+// Fetch latest telemetry data from backend
+async function fetchTelemetryData() {
+  try {
+    const response = await fetch('/api/data');
+    const data = await response.json();
 
-  gaugeValues.fuel -= fuelConsumptionRate;
-  if (gaugeValues.fuel < lowFuelThreshold) gaugeValues.fuel = maxValues.fuel;
+    gaugeValues.speed = data.speed || 0;
+    gaugeValues.rpm = data.rpm || 0;
+    gaugeValues.temperature = data.temperature || 0;
+    gaugeValues.fuel = data.fuel || 0;
+    gaugeValues.throttle = data.throttle || 0;
+    gaugeValues.brake = data.brake || 0;
+    gaugeValues.oilPressure = data.oilPressure || 0;
+    gaugeValues.coolantTemp = data.coolantTemp || 0;
+    gaugeValues.iat = data.iat || 0;
+  } catch (error) {
+    console.error('Failed to fetch telemetry data:', error);
+  }
+}
+
+async function updateDashboard() {
+  await fetchTelemetryData();
 
   for (let key in gaugeValues) {
     if (document.getElementById(key)) {
@@ -124,6 +128,7 @@ function updateDashboard() {
     }
   }
 
+  // Simulated gear display (you can connect real data here too)
   const randomGear = gears[Math.floor(Math.random() * gears.length)];
   document.getElementById('gearDisplay').innerText = randomGear;
 
