@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: Telemetry POST API
+  version: 1.0.0
+paths:
+  /api/data:
+    post:
+      summary: Post multiple sensor readings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  sensor_type:
+                    type: string
+                  value:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+      responses:
+        '201':
+          description: Inserted
+        '400':
+          description: Bad request
+        '500':
+          description: Server error
