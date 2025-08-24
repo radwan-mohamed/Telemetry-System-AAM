@@ -1,11 +1,12 @@
 
+/telemetry-backend/node_modules
+/Server-side-fetch/node_modules
+
 
 /telemetry-backend/node_modules/
 /telemetry-backend/node_modules/mysql2
 /telemetry-backend/node_modules
 /telemetry-backend/node_modules
-
-
 
 
 
