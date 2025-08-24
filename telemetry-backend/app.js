@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 3000;
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./docs/openapi.yaml');
+const { sequelize } = require('./models');
+
 
 
 // Middleware
@@ -36,6 +38,15 @@ app.use('/api/health', healthRoutes);
 app.use('/api/rpm', rpmRoutes);
 app.use('/api/acceleration', accelRoutes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
+sequelize.sync({ alter: true }).then(() => {
+  console.log('✅ Sequelize synced the database');
+}).catch(err => {
+  console.error('❌ Sequelize sync error:', err);
+});
+
+
 
 // Start server
 app.listen(PORT, () => {
