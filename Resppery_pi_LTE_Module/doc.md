@@ -1,3 +1,37 @@
+
+## Step-by-Step: Raspberry Pi + Waveshare SIM7600X + STM32
+
+> This follows the tutorial here and adapts it to our setup (Orange SIM, Python sender, STM32 on a separate USB-UART). See the video for a visual walkthrough. 
+
+### What you need
+- **Raspberry Pi** (Pi 4 or Pi 5) with the **official power supply**  
+  - Pi 5 → Official **27W USB-C (5.1 V/5 A)**. 
+  - Pi 4 → Official **15W USB-C (5.1 V/3 A)**. 
+- **Waveshare SIM7600X 4G HAT** (or SIM7600G-H/E-H variant) with LTE + GNSS antennas attached.
+- **Nano-SIM (Orange)** with data plan active.
+- **USB-to-TTL UART (CH340)** for the **STM32** (so the HAT can use the Pi’s UART or USB independently).
+- A microSD with Raspberry Pi OS (use **Raspberry Pi Imager** to flash).
+
+### Hardware hookup
+1. Power off the Pi. Insert the **Nano-SIM** in the HAT. Connect LTE (MAIN) and GNSS antennas.
+2. Seat the HAT on the Pi’s GPIO header (or use the HAT’s **USB** cable to the Pi if you’ll use USB mode).
+3. Plug the **CH340** into the Pi for the **STM32** link. (This keeps a second, independent serial for STM32.)
+4. Power the Pi with its **official PSU** (don’t power the HAT from random USB ports).
+5. On the HAT, press/hold **PWRKEY** if required until the **PWR** LED comes on. The **NET** LED will start indicating network tatus once registered (slow blink/heartbeat).
+
+###  OS prep (first boot)
+```bash
+sudo apt update && sudo apt -y full-upgrade
+sudo apt -y install git python3-pip minicom screen modemmanager network-manager
+```
+###  OS prep (first boot)
+
+Check the [newlast.py] and install it in the resppery
+
+---
+---
+
+
 ## Resources
 
 ### Official Docs & Software
