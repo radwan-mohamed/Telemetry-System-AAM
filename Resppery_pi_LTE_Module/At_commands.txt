@@ -1,0 +1,109 @@
+Here’s a complete step-by-step sequence of AT commands you can type into PuTTY (over your STM32 ⇄ SIM7600GH UART link at 115200 8 N 1) to bring up an HTTPS GET to your `/insert.php` endpoint and see the response in the terminal:
+
+> **In PuTTY**: Open a **Serial** connection on your COM port at **115200 baud, 8 data bits, no parity, 1 stop bit**. Then type/paste each line below (hit Enter after each), and when you see the `>` prompt, paste the HTTP request (including blank line) and finish with **Ctrl+Z** (ASCII 0x1A).
+
+---
+
+```
+AT
+```
+
+Should return `OK`.
+
+```
+AT+CPIN?
+```
+
+SIM ready?
+
+```
+AT+CREG?
+```
+
+Registered to the network?
+
+```
+AT+CGATT?
+```
+
+GPRS attached?
+
+```
+AT+CSQ
+```
+
+Signal strength.
+
+```
+AT+CGDCONT=1,"IP","live.vodafone.com"
+```
+
+Set your APN.
+
+```
+AT+NETOPEN
+```
+
+Bring up the IP session.
+
+```
+AT+NETOPEN?
+```
+
+Should reply `+NETOPEN: 1`.
+
+```
+AT+CIPSSL=1
+```
+
+Enable SSL/TLS.
+
+```
+AT+CIPSTART="TCP","nizarmohideen.atwebpages.com","443"
+```
+
+Open a secure TCP socket.
+→ You’ll see something like `OK` then `+QIOPEN: 0,0` when connected.
+
+```
+AT+CIPSTATUS
+```
+
+Verify `STATE: SSL CONNECTED` (or similar).
+
+```
+AT+CIPSEND=107
+```
+
+(107 = the total bytes of the GET request below, including CRLFs)
+
+*Now PuTTY will show a single* `>` *prompt*. Paste exactly:\*
+
+```
+GET /insert.php?key=a@4K3&distance=123 HTTP/1.1
+Host: nizarmohideen.atwebpages.com
+
+```
+
+(That’s **three** lines: the GET line, the Host header, and a blank line.)
+
+*Then press* **Ctrl+Z** *(␚) to send.*
+You should see the raw HTTPS response (e.g. `HTTP/1.1 200 OK` and your “OK: received…” body).
+
+```
+AT+CIPCLOSE
+```
+
+Close the socket.
+
+```
+AT+NETCLOSE
+```
+
+## Tear down the IP session.
+
+### Tips
+
+* If you get no `>` after `AT+CIPSEND`, increase the timeout or check your `AT+NETOPEN?` status again.
+* Adjust the `CIPSEND` byte-count if you change the request text.
+* For a POST, you’d do almost the same but build a POST request block (with `Content-Length` header) and send it under the same `AT+CIPSEND=` prompt.

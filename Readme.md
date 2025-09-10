@@ -2,57 +2,92 @@
 
 > telemetry platform that collects car signals on an **STM32**, relays them via **Raspberry Pi 5**, **LTE Module **, persists on a server‑side database, and exposes data to a **frontend dashboard**.
 
----
 
-## 0) Scope
+Collect signals on **STM32**, send via **Raspberry Pi 5 + SIM7600X (LTE)** to a backend, store in DB, and visualize in a frontend.
 
-**In‑scope (this document):** overall objectives, components, data flow, interfaces, environments, security/SLOs, and milestones.
-**Out‑of‑scope (for now):** implementation code, config files, schemas, Docker/K8s manifests.
 
 ---
 
-## Repo Map (current)
 
+
+## System Diagram
+![System Diagram](Diagram.png)
+
+---
+
+## Repo Map
 ```
+
 Telemetry-System-AAM/
-├─ telemetry-backend/           # API + DB access (server writes/reads)
-├─ telemetry_frontend/          # UI that fetches data from backend
-├─ Server-side-fetch/           # Sync/commands between server ↔ Raspberry Pi
-├─ assets _front/               # Frontend assets (suggest rename → assets_front)
-├─ Graphes/                     # Legacy charts (suggest move → experiments/graphes)
-├─ Temperature/                 # Legacy temp demo (suggest move → experiments/temperature)
-├─ .gitattributes
-└─ .gitignore
+├─ Resppery\_pi\_LTE\_Module/   # Pi + LTE modem code & docs (AT, bring-up, sender)
+├─ Stem\_32/                  # STM32 firmware (Nextion + Telemetry UART)
+├─ telemetry-backend/        # API/ingest + DB access
+├─ telemetry\_frontend/       # Dashboard UI
+├─ Server-side-fetch/        # Server↔Pi control/sync
+├─ Graphes/                  # Legacy charts
+├─ Temperature/              # Legacy temp demo
+├─ assets \_front/            # Frontend assets
+├─ Diagram.png
+└─ Readme.md
+
 ```
 
-**Owner notes**
+**Key docs**
+- Pi/LTE setup & AT commands: `Resppery_pi_LTE_Module/doc.md`, `Resppery_pi_LTE_Module/At_commands.txt`
+- STM32 wiring & CubeIDE notes: `Stem_32/docs.md`
+- Pi sender script: `Resppery_pi_LTE_Module/newlast.py`
+
+---
+
+## End-to-End Flow 
+1. **STM32** reads signals and prints telemetry lines on **UART5** (e.g., `speed=42`), updates **Nextion** over **UART4**.
+2. **Raspberry Pi 5** reads STM32 via **USB-UART (CH340)**, brings LTE up (SIM7600X), and runs `newlast.py` to send data to the **backend endpoint**.
+3. **Backend** validates and stores data in the **database**.
+4. **Frontend** queries the backend to show live tiles and charts.
+5. **Server-side-fetch** can push configs/commands to the Pi when needed.
+
+---
+
+## Quick Start 
+- **STM32**
+  - Open `Stem_32` project in **STM32CubeIDE** and flash `main.c`.
+  - UART4 @ 9600 to **Nextion**, UART5 @ 115200 to **CH340 → Pi**. Share GND.
+
+- **Raspberry Pi 5 + LTE**
+  - Use official PSU. Insert SIM (Orange), attach antennas.
+  - Follow `Resppery_pi_LTE_Module/doc.md` to bring up modem (USB or UART). Test **AT** first.
+  - Run the sender:
+    ```bash
+    cd ~/Resppery_pi_LTE_Module
+    python3 newlast.py --stm-port /dev/ttyUSB0 --baud 115200
+    ```
+  - (Optional) Add a cron `@reboot` entry as shown in the doc.
+
+- **Backend & DB**
+  - Start the API and DB from `telemetry-backend/` (env and ports per that folder’s README).
+
+- **Frontend**
+  - Start the UI from `telemetry_frontend/` and point it to the backend URL.
+
+---
+
+## Interfaces 
+- **Edge → Backend**: Pi posts batches over HTTPS (URL/API key defined in `newlast.py` or `.env`).
+- **Frontend → Backend**: HTTP/WS for charts, tiles, and live updates.
+- **Server-side-fetch ↔ Pi**: control/diagnostics channel (pull/push).
+
+---
+
+## Notes
+- Use **USB-UART (CH340)** for STM32 so the modem can keep its own port.
+- Always test with **AT commands** before running the Pi script.
+- Keep power clean (official Pi PSU) to avoid brownouts on LTE attach.
+
 
 * *Server-side-fetch* is the service that pulls from the **server to the Raspberry Pi** (e.g., configs/commands) and can also be used for pushing buffered data upward.
 * *telemetry-backend* and *telemetry\_frontend* together present data to users and read/write the database.
 
 ---
-
-## 1) System Diagram
-
-```mermaid
-flowchart LR
-  subgraph Vehicle
-    MCU[STM32
-(CAN/OBD‑II + Sensors)] -->|UART/CAN| RPI[Raspberry Pi 5
-Edge Agent]
-    GPS[GNSS] --> MCU
-  end
-
-  RPI -->|uplink (HTTPS/MQTT)| IN[Ingest Service]
-  IN --> PROC[Processor / Normalizer]
-  PROC --> DB[(Time‑Series DB)]
-  PROC --> OBJ[(Object Store / Backups)]
-
-  UI[Frontend Dashboard] <-- REST/SSE/WS --> API[Read API]
-  API --> DB
-
-  CTRL[Server‑Side Fetch/Control] <---> RPI
-```
 
 ---
 
@@ -113,11 +148,11 @@ Edge Agent]
 * **Edge Control Interface** → Channel for server→Pi commands/config.
 * **Read API** → Endpoints for dashboards to query metrics/time ranges and to subscribe to live updates.
 
-> Final endpoint names and payload fields will be defined after signal list finalization.
+
 
 ---
 
-## 6) Data Model (conceptual)
+## 6) Data Model 
 
 * **Vehicle**: id, vin, label.
 * **Device**: id, type (stm32/pi), belongs\_to vehicle.
@@ -125,7 +160,7 @@ Edge Agent]
 * **Event/Alert**: vehicle\_id, timestamp, rule\_id, severity, message.
 * **Trip**: vehicle\_id, start\_ts, end\_ts, summary stats.
 
-> ERD and exact types to follow once signals are frozen.
+
 
 ---
 
@@ -133,27 +168,12 @@ Edge Agent]
 
 * **Dev (local)**: single‑node DB + backend + UI.
 * **Edge Lab**: Raspberry Pi in lab network for integration.
-* **Prod**: cloud DB, horizontally scalable API, secured edge connectivity.
+* **Prod**:  DB, horizontally scalable API, secured edge connectivity.
 
 ---
 
-## 8) Security & Privacy (minimum bar)
 
-* Mutual trust: device API keys/identities; rotate keys.
-* Transport encryption end‑to‑end.
-* Principle of least privilege for services and users.
-* Data retention policy for raw vs. processed telemetry.
 
----
-
-## 9) Reliability & Observability Targets
-
-* **Ingest availability**: ≥ 99.9% (monthly).
-* **End‑to‑end latency (edge→DB)**: p95 ≤ 5 s (online).
-* **Backpressure handling**: store‑and‑forward with bounded buffers on Pi.
-* **Visibility**: metrics for ingest success/failure, queue sizes, DB write rate; structured logs and trace IDs.
-
----
 
 ## 10) Milestones
 
@@ -161,7 +181,7 @@ Edge Agent]
 * **M2 — Vertical Slice**: one signal flows STM32 → Pi → DB → dashboard live tile.
 * **M3 — Robust Edge**: offline buffering + retry + control channel verified.
 * **M4 — Dashboards**: live map, charts, and alerting views.
-* **M5 — Hardening**: security review, load test, backups, and SLO monitors.
+
 
 ---
 
@@ -174,6 +194,5 @@ Edge Agent]
 
 ---
 
-### Next step from you
 
-Share the definitive list of signals (names + units + expected ranges). I’ll update the diagram, interfaces, and the conceptual model to match, still without adding any code.
+
